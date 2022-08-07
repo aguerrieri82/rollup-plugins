@@ -146,10 +146,12 @@ export default function typescript(options: RollupTypescriptOptions = {}): Plugi
             baseDir = tsconfig.substring(0, tsconfig.lastIndexOf('/'));
           }
           if (!code || !baseDir) return;
-
+          let outFile = path.relative(baseDir, id);
+          if (options.declarationDir)
+              outFile = path.join(options.declarationDir, outFile)
           this.emitFile({
             type: 'asset',
-            fileName: normalizePath(path.relative(baseDir, id)),
+            fileName: normalizePath(outFile),
             source: code
           });
         });
